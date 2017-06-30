@@ -8,7 +8,8 @@ const rl = readline.createInterface({
 });
 
 let board = [];
-let solution = '';
+let solution = 'abcd';
+let guess = '';
 let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
 function printBoard() {
@@ -17,30 +18,50 @@ function printBoard() {
   }
 }
 
-function generateSolution() {
-  for (let i = 0; i < 4; i++) {
-    const randomIndex = getRandomInt(0, letters.length);
-    solution += letters[randomIndex];
-  }
-}
+// function generateSolution() {
+//   for (let i = 0; i < 4; i++) {
+//     const randomIndex = getRandomInt(0, letters.length);
+//     solution += letters[randomIndex];
+//   }
+// }
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function generateHint() {
-  // your code here
+function generateHint(guess, solution) {
+  let exact = 0;
+  let kinda = 0;
+  for (let i = 0; i < 4; i++) {
+    if (guess[i] === solution[i]) {
+      exact += 1;
+    } else {
+      for (let j = 0; j < 4; j++) {
+        if (guess[i] === solution[j]) {
+          kinda += kinda - exact;
+        }
+      }
+    }
+  }
+  console.log('E: '+exact+'/K: '+kinda)
+  console.log('guess: '+guess)
+  console.log('solution: '+solution)
+  console.log('guess 1: '+guess[0]+' 2: '+guess[1]+' 3: '+guess[2]+' 4: '+guess[3])
+  console.log('solution 1: '+solution[0]+' 2: '+solution[1]+' 3: '+solution[2]+' 4: '+solution[3])
 }
 
 function mastermind(guess) {
-  // solution = 'abcd'; // uncomment this when developing
-  // your code here
+  if (solution !== guess) {
+    generateHint(guess, solution);
+  } else {
+    return 'You guessed it!';
+  }
 }
 
 
 function getPrompt() {
   rl.question('guess: ', (guess) => {
-    console.log( mastermind(guess) );
+    console.log(mastermind(guess));
     printBoard();
     getPrompt();
   });
@@ -72,6 +93,6 @@ if (typeof describe === 'function') {
 
 } else {
 
-  generateSolution();
+//  generateSolution();
   getPrompt();
 }
