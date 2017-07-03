@@ -35,25 +35,20 @@ function generateHint(guess, solution) {
   let temp = [];
   let dupe = 0;
 
-  //  abcd          e=1/
-  //  acdb          k=n/1/1/1
-
-  //  abcd          e=1/1/1/1   1 /1 /1  /
-  //  aabb          k=n/1/2/3   n /n /1  /2
-  //                t=          []/[]/[1]/[1,1]
-// i=3 j=1 k=0
   for (let i = 0; i < 4; i++) {
+    // This first detects if there is an exact match.  If not it continues
     if (guess[i] === solution[i]) {
       exact += 1;
     } else {
       for (let j = 0; j < 4; j++) {
+    // This detects if there are any correct guesses in the wrong spot
         if (guess[i] === solution[j] && guess[j] !== solution[j]) {
           kinda += 1;
-          temp.push(j);
-          // console.log('temp length2: '+temp.length)
+          temp.push(j); // This pushes to an array to later be used to make sure the
+// hint doesn't display more 'kinda' correct answers than necessary. (e.g. - guessing
+// aabb when the answer is abcd will return a 1-1 rather than 1-3)
           for (let k = 0; k < temp.length-1; k++) {
-            // console.log('solution[j]: '+solution[j])
-            //           console.log('temp[k]: '+solution[temp[k]])
+            // This keeps track of duplicate marks to be subtracted from the score later
             if (solution[j] === solution[temp[k]]) {
               dupe += 1;
             }
@@ -63,14 +58,7 @@ function generateHint(guess, solution) {
     }
     kinda = kinda - dupe
   }
-
-console.log(exact+' - '+kinda)
-// console.log(solution)
-  // console.log('E: ' + exact + ' K: ' + kinda + ' T: ' + temp+' D: '+dupe)
-  // console.log('guess: ' + guess)
-  // console.log('solution: ' + solution)
-  // console.log('guess 1: ' + guess[0] + ' 2: ' + guess[1] + ' 3: ' + guess[2] + ' 4: ' + guess[3])
-  // console.log('solution 1: ' + solution[0] + ' 2: ' + solution[1] + ' 3: ' + solution[2] + ' 4: ' + solution[3])
+  board.push(guess+' '+exact+'-'+kinda)
 }
 
 function mastermind(guess) {
@@ -93,9 +81,10 @@ function getPrompt() {
 // Tests
 
 if (typeof describe === 'function') {
-  solution = 'abcd';
+
   describe('#mastermind()', () => {
     it('should register a guess and generate hints', () => {
+      solution = 'abcd';
       mastermind('aabb');
       assert.equal(board.length, 1);
     });
@@ -106,16 +95,16 @@ if (typeof describe === 'function') {
 
   describe('#generateHint()', () => {
     it('should generate hints', () => {
-      assert.equal(generateHint('abdc'), '2-2');
+      assert.equal(generateHint('abcd', 'abdc'), '2-2');
     });
     it('should generate hints if solution has duplicates', () => {
-      assert.equal(generateHint('aabb'), '1-1');
+      assert.equal(generateHint('abcd', 'aabb'), '1-1');
     });
 
   });
 
 } else {
 
-   generateSolution();
+  generateSolution();
   getPrompt();
 }

@@ -9,7 +9,7 @@ const rl = readline.createInterface({
 });
 
 const board = [];
-let solution = '';
+let solution = 'abcd';
 const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
 function printBoard() {
@@ -94,6 +94,6 @@ if (typeof describe === 'function') {
 
 } else {
 
-  generateSolution();
+//  generateSolution();
   getPrompt();
 }
