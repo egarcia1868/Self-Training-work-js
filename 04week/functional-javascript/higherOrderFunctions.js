@@ -1,13 +1,12 @@
-function repeat(operation, num) {
-  // SOLUTION GOES HERE
-  let x = 0;
-  operation(x)
-  if (x >= num) {
-    return;
-  } else {
-    operation(x + 1);
-  }
-}
+    function repeat(operation, num) {
+      // SOLUTION GOES HERE
+      if (num <= 0) {
+        return;
+      } else {
+        operation();
+        repeat(operation, --num);
+      }
+    }
 
-// Do not remove the line below
-module.exports = repeat
+    // Do not remove the line below
+    module.exports = repeat

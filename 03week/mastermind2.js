@@ -8,7 +8,7 @@ const rl = readline.createInterface({
 });
 
 let board = [];
-let solution = '';
+let solution = 'abcd';
 let guess = '';
 let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
@@ -34,36 +34,45 @@ function generateHint(guess, solution) {
   let kinda = 0;
   let temp = [];
   let dupe = 0;
+  let soluDupe = 0;
 
-  for (let i = 0; i < 4; i++) {
-    // This first detects if there is an exact match.  If not it continues
-    if (guess[i] === solution[i]) {
-      exact += 1;
-    } else {
-      for (let j = 0; j < 4; j++) {
-    // This detects if there are any correct guesses in the wrong spot
-        if (guess[i] === solution[j] && guess[j] !== solution[j]) {
-          kinda += 1;
-          temp.push(j); // This pushes to an array to later be used to make sure the
-// hint doesn't display more 'kinda' correct answers than necessary. (e.g. - guessing
-// aabb when the answer is abcd will return a 1-1 rather than 1-3)
-          for (let k = 0; k < temp.length-1; k++) {
-            // This keeps track of duplicate marks to be subtracted from the score later
-            if (solution[j] === solution[temp[k]]) {
-              dupe += 1;
+  for (let h = 0; h < 4; h++) {
+    for (let i = 0; i < 4; i++) {
+      if (solution[h] === solution[i]) {
+        soluDupe++;
+      }
+      // This first detects if there is an exact match.  If not it continues
+      if (guess[i] === solution[i]) {
+        exact++;
+      } else {
+        for (let j = 0; j < 4; j++) {
+      // This detects if there are any correct guesses in the wrong spot
+          if (guess[i] === solution[j] && guess[j] !== solution[j]) {
+            kinda++;
+            temp.push(j); // This pushes to an array to later be used to make sure the
+  // hint doesn't display more 'kinda' correct answers than necessary. (e.g. - guessing
+  // aabb when the answer is abcd will return a 1-1 rather than 1-3)
+            for (let k = 0; k < temp.length-1; k++) {
+              // This keeps track of duplicate marks to be subtracted from the score later
+              if (solution[j] === solution[temp[k]]) {
+                dupe += 1;
+              }
             }
-          }
+          }}
         }
       }
+      if (soluDupe/4 !== 1) {
+
+      }
+      console.log(soluDupe)
+      kinda = kinda - dupe
     }
-    kinda = kinda - dupe
-  }
-  board.push(guess+' '+exact+'-'+kinda)
+  return exact+'-'+kinda
 }
 
 function mastermind(guess) {
   if (solution !== guess) {
-    generateHint(guess, solution);
+    board.push(generateHint(guess, solution));
   } else {
     return 'You guessed it!';
   }
@@ -105,6 +114,6 @@ if (typeof describe === 'function') {
 
 } else {
 
-  generateSolution();
+//  generateSolution();
   getPrompt();
 }
