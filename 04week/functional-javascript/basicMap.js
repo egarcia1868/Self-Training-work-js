@@ -5,3 +5,10 @@ function doubleAll(numbers) {
 }
 
 module.exports = doubleAll
+
+
+function doubleAll(numbers) {
+  // SOLUTION GOES HERE
+}
+
+module.exports = doubleAll

@@ -87,7 +87,6 @@ function getPrompt() {
       getPrompt();
     });
   });
-
 }
 
 
